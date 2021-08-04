@@ -1,6 +1,7 @@
 #pragma once
 #include<string.h>
-#include <SDL2/SDL.h>
+#include<emscripten.h>
+#include<SDL2/SDL.h>
 #define MAX_VOLUME SDL_MIX_MAXVOLUME
 static const int MAX_SONGS=64;
 static SDL_AudioFormat audio_format=AUDIO_S16;
