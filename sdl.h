@@ -17,9 +17,7 @@ int volume;
 int loop;
 bool isMusic;
 bool isPaused;
-AudioData(){
-}
-};
+AudioData(){}};
 AudioData stored_audio_data[MAX_SONGS];
 class SDL_AudioPlayer{
 private:
@@ -44,9 +42,7 @@ for (int i=0; i < MAX_SONGS; i++){
 if(stored_audio_data[i].wavBuffer != nullptr){
 stored_audio_data[i].wavSpec.callback=NULL;
 SDL_FreeWAV(stored_audio_data[i].wavBuffer);
-}
-}
-}
+}}}
 void loadMusic(const char *filePath,const char *audioName){
 createAudio(filePath,audioName,true);
 }
@@ -65,19 +61,17 @@ if(stored_audio_data[index].isMusic){
 if(is_playing_music){
 next_music_on_queue=audioName;
 stored_audio_data[index].isPaused=true;
-} else{
+}else{
 is_playing_music=true;
 playing_music_name=audioName;
 stored_audio_data[index].isPaused=false;
-}
-} else{
+}}else{
 stored_audio_data[index].isPaused=false;
 }
 if(!m_IsDeviceEnabled){
 SDL_PauseAudioDevice(m_DeviceId,0);
 m_IsDeviceEnabled=true;
-}
-}
+}}
 void pause(const char *audioName){
 int index=findAudioIndexByName(audioName);
 if(index == -1){
@@ -107,8 +101,7 @@ void stop(){
 for (int i=0; i < MAX_SONGS; i++){
 if(stored_audio_data[i].wavBuffer != nullptr){
 stored_audio_data[i].isPaused=true;
-}
-}
+}}
 SDL_PauseAudioDevice(m_DeviceId,1);
 m_IsDeviceEnabled=false;
 }
@@ -118,8 +111,7 @@ this->SDL_AudioPlayer::~SDL_AudioPlayer();
 private:
 void createAudio(const char *filePath,const char *audioName,bool isMusic){
 if((strcmp(filePath,"") == 0)){
-SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Cannot create a new audio without a file path! %s\n",
-             audioName);
+SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Cannot create a new audio without a file path! %s\n",audioName);
 return;
 }
 if((strcmp(audioName,"") == 0)){
@@ -131,19 +123,16 @@ for (int i=0; i < MAX_SONGS; i++){
 if(stored_audio_data[i].name == nullptr){
 emptySlot=i;
 break;
-}
-}
+}}
 if(emptySlot == -1){
-SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Exceeded the number of simultaneous audios.\nMAX_SONGS = %i\n",
-             MAX_SONGS);
+SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Exceeded the number of simultaneous audios.\nMAX_SONGS = %i\n",MAX_SONGS);
 return;
 }
 SDL_LockAudioDevice(m_DeviceId);
 SDL_memset(&stored_audio_data[emptySlot],0,sizeof(AudioData));
-if(SDL_LoadWAV(filePath,&stored_audio_data[emptySlot].wavSpec,&stored_audio_data[emptySlot].wavBuffer,
-               &stored_audio_data[emptySlot].wavLength) == NULL){
+if(SDL_LoadWAV(filePath,&stored_audio_data[emptySlot].wavSpec,&stored_audio_data[emptySlot].wavBuffer,&stored_audio_data[emptySlot].wavLength) == NULL){
 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Could not open %s: %s\n",filePath,SDL_GetError());
-} else{
+}else{
 stored_audio_data[emptySlot].isPaused=true;
 stored_audio_data[emptySlot].isMusic=isMusic;
 stored_audio_data[emptySlot].wavSpec.freq=m_AudioFrequency;
@@ -156,10 +145,9 @@ stored_audio_data[emptySlot].wavSpec.callback=audio_callback;
 m_DeviceId=SDL_OpenAudioDevice(NULL,0,&stored_audio_data[emptySlot].wavSpec,NULL,0);
 if(m_DeviceId == 0){
 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Could not open AudioDevice: %s\n",SDL_GetError());
-} else{
+}else{
 m_IsDeviceOpened=true;
-}
-}
+}}
 stored_audio_data[emptySlot].name=audioName;
 }
 SDL_UnlockAudioDevice(m_DeviceId);
@@ -168,8 +156,7 @@ int findAudioIndexByName(const char *audioName){
 for (int i=0; i < MAX_SONGS; i++){
 if(stored_audio_data[i].wavBuffer != nullptr && stored_audio_data[i].name == audioName){
 return i;
-}
-}
+}}
 return -1;
 }
 int fixVolume(int volume){
@@ -179,8 +166,7 @@ volume=MAX_VOLUME;
 volume=0;
 }
 return volume;
-}
-};
+}};
 static inline void audio_callback(void *userdata,Uint8 *stream,int len){
 AudioData *audioPtr=(AudioData *) userdata;
 SDL_memset(stream,0,len);
@@ -195,8 +181,7 @@ if(is_playing_music && stored_audio_data[i].isMusic && stored_audio_data[i].volu
 stored_audio_data[i].volume--;
 if(stored_audio_data[i].volume == 0){
 is_playing_music=false;
-}
-}
+}}
 if(!is_playing_music && stored_audio_data[i].isMusic && stored_audio_data[i].volume > 0 && stored_audio_data[i].name == next_music_on_queue){
 next_music_on_queue="";
 is_playing_music=true;
@@ -209,6 +194,4 @@ len=(tempLen > stored_audio_data[i].wavLength ? stored_audio_data[i].wavLength :
 SDL_MixAudioFormat(stream,stored_audio_data[i].wavBuffer,audio_format,tempLen,stored_audio_data[i].volume);
 stored_audio_data[i].wavBuffer+=tempLen;
 stored_audio_data[i].wavLength-=tempLen;
-}
-}
-}
+}}}
