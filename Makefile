@@ -1,4 +1,4 @@
-EMCCC = emcc
+EMCCC = em++
 
 
 all:
