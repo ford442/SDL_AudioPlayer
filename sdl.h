@@ -1,4 +1,5 @@
 #pragma once
+#include<stdbool.h>
 #include<string.h>
 #include<emscripten.h>
 #include<SDL2/SDL.h>
